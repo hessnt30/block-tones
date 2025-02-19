@@ -33,21 +33,22 @@ export function PaletteGrid() {
   return (
     <div className="grid gap-3">
       {palettes.map((palette) => (
-        <div
-          key={palette.id}
-          className="rounded-lg border border-zinc-800 bg-zinc-900 p-3"
-        >
+        <div key={palette.id} className="rounded-lg border bg-background p-3">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <User className="size-3 text-zinc-400" />
-              <span className="text-xs text-zinc-400">{palette.author}</span>
-              <span className="text-xs text-zinc-500">
+              <User className="size-3 text-foreground-muted" />
+              <span className="text-xs text-foreground-muted">
+                {palette.author}
+              </span>
+              <span className="text-xs text-foreground-muted">
                 {format(palette.createdAt, "MMM d, yyyy")}
               </span>
             </div>
             <div className="flex items-center gap-1">
-              <Heart className="size-3 text-zinc-400" />
-              <span className="text-xs text-zinc-400">{palette.likes}</span>
+              <Heart className="size-3 text-foreground-muted" />
+              <span className="text-xs text-foreground-muted">
+                {palette.likes}
+              </span>
             </div>
           </div>
           <div className="mb-3 grid grid-cols-5 gap-1.5">
@@ -60,12 +61,14 @@ export function PaletteGrid() {
             ))}
           </div>
           <div className="mb-3">
-            <h3 className="text-sm font-medium text-white">{palette.title}</h3>
+            <h3 className="text-sm font-medium text-foreground">
+              {palette.title}
+            </h3>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {palette.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full bg-zinc-800 px-1.5 py-0.5 text-xs text-zinc-400"
+                  className="rounded-full bg-secondary px-1.5 py-0.5 text-xs text-secondary-accent"
                 >
                   {tag}
                 </span>
