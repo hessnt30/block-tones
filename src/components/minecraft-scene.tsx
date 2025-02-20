@@ -58,6 +58,23 @@ function MinecraftSlab({
   );
 }
 
+function MinecraftStair({
+  position,
+  texture,
+}: {
+  position: [number, number, number];
+  texture: string;
+}) {
+  const tex = useTexture(texture);
+
+  return (
+    <mesh castShadow receiveShadow position={position}>
+      <boxGeometry args={[0.5, 0.5, 1]} />
+      <meshStandardMaterial map={tex} />
+    </mesh>
+  );
+}
+
 function MinecraftDoorTop({
   position,
   texture,
@@ -106,8 +123,8 @@ function MinecraftHouse() {
   const blocks = [];
 
   // Floor
-  for (let x = 0; x < 5; x++) {
-    for (let z = 0; z < 5; z++) {
+  for (let x = 0; x < 6; x++) {
+    for (let z = 0; z < 6; z++) {
       blocks.push(
         <MinecraftBlock
           key={`floor-${x}-${z}`}
@@ -120,9 +137,9 @@ function MinecraftHouse() {
 
   // Walls
   for (let y = 1; y < 5; y++) {
-    for (let x = 0; x < 5; x++) {
+    for (let x = 0; x < 6; x++) {
       // leave hole in wall for door
-      if (x === 2 && (y === 1 || y === 2)) continue;
+      // if ((x === 2 || x === 3) && (y === 1 || y === 2)) continue;
       blocks.push(
         <MinecraftBlock
           key={`wall-x-${x}-${y}`}
@@ -133,12 +150,12 @@ function MinecraftHouse() {
       blocks.push(
         <MinecraftBlock
           key={`wall-x-${x}-${y}-back`}
-          position={[x, y, 4]}
+          position={[x, y, 5]}
           texture={textures.wood}
         />
       );
     }
-    for (let z = 1; z < 4; z++) {
+    for (let z = 1; z < 5; z++) {
       blocks.push(
         <MinecraftBlock
           key={`wall-z-${z}-${y}`}
@@ -149,39 +166,183 @@ function MinecraftHouse() {
       blocks.push(
         <MinecraftBlock
           key={`wall-z-${z}-${y}-right`}
-          position={[4, y, z]}
+          position={[5, y, z]}
           texture={textures.wood}
         />
       );
     }
   }
 
-  // Roof
-  for (let x = 0; x < 5; x++) {
-    for (let z = 0; z < 5; z++) {
-      blocks.push(
-        <MinecraftSlab
-          key={`roof-${x}-${z}`}
-          position={[x, 5 - 0.25, z]}
-          texture={textures.cobble_stone}
-        />
-      );
+  for (let y = 5; y < 7; y++) {
+    if (y == 5) {
+      for (let x = 1; x < 5; x++) {
+        blocks.push(
+          <MinecraftBlock
+            key={`top-wall-z-${x}-${y}-${0}`}
+            position={[x, y, 0]}
+            texture={textures.wood}
+          />
+        );
+
+        blocks.push(
+          <MinecraftBlock
+            key={`top-wall-z-${x}-${y}-${5}-back`}
+            position={[x, y, 5]}
+            texture={textures.wood}
+          />
+        );
+      }
     }
+
+    if (y === 6) {
+      for (let x = 2; x < 4; x++) {
+        blocks.push(
+          <MinecraftBlock
+            key={`top-wall-z-${x}-${y}-${0}`}
+            position={[x, y, 0]}
+            texture={textures.wood}
+          />
+        );
+
+        blocks.push(
+          <MinecraftBlock
+            key={`top-wall-z-${x}-${y}-${5}-back`}
+            position={[x, y, 5]}
+            texture={textures.wood}
+          />
+        );
+      }
+    }
+  }
+
+  // Roof -- rightside
+  for (let x = 0; x < 1; x++) {
+    for (let y = 5; y <= 7; y++) {
+      for (let z = -1; z < 7; z++) {
+        blocks.push(
+          <MinecraftSlab
+            key={`slab-roof-${x}-${y}-${z}`}
+            position={[x + (y - 5), y - 0.25, z]}
+            texture={textures.cobble_stone}
+          />
+        );
+
+        blocks.push(
+          <MinecraftStair
+            key={`stair-roof-${x}-${y}-${z}`}
+            position={[x + (y - 5) + 0.25, y + 0.25, z]}
+            texture={textures.cobble_stone}
+          />
+        );
+      }
+    }
+  }
+
+  for (let x = 1; x < 2; x++) {
+    for (let y = 5; y < 7; y++) {
+      for (let z = -1; z < 7; z++) {
+        blocks.push(
+          <MinecraftSlab
+            key={`slab-roof-${x}-${y}-${z}`}
+            position={[x + (y - 5), y + 0.25, z]}
+            texture={textures.cobble_stone}
+          />
+        );
+
+        blocks.push(
+          <MinecraftStair
+            key={`stair-roof-${x}-${y}-${z}`}
+            position={[x + (y - 5) - 0.25, y - 0.25, z]}
+            texture={textures.cobble_stone}
+          />
+        );
+      }
+    }
+  }
+
+  // Roof -- leftside
+  for (let x = 5; x < 6; x++) {
+    for (let y = 5; y <= 7; y++) {
+      for (let z = -1; z < 7; z++) {
+        blocks.push(
+          <MinecraftSlab
+            key={`slab-roof-${x}-${y}-${z}`}
+            position={[x - (y - 5), y - 0.25, z]}
+            texture={textures.cobble_stone}
+          />
+        );
+        blocks.push(
+          <MinecraftStair
+            key={`stair-roof-${x}-${y}-${z}`}
+            position={[x - (y - 5) - 0.25, y + 0.25, z]}
+            texture={textures.cobble_stone}
+          />
+        );
+      }
+    }
+  }
+
+  for (let x = 4; x < 5; x++) {
+    for (let y = 5; y < 7; y++) {
+      for (let z = -1; z < 7; z++) {
+        blocks.push(
+          <MinecraftSlab
+            key={`slab-roof-${x}-${y}-${z}`}
+            position={[x - (y - 5), y + 0.25, z]}
+            texture={textures.cobble_stone}
+          />
+        );
+        blocks.push(
+          <MinecraftStair
+            key={`stair-roof-${x}-${y}-${z}`}
+            position={[x - (y - 5) + 0.25, y - 0.25, z]}
+            texture={textures.cobble_stone}
+          />
+        );
+      }
+    }
+  }
+
+  // Roof - apex
+  for (let z = -1; z < 6; z++) {
+    blocks.push(
+      <MinecraftSlab
+        key={`slab-roof-${2}-${7}-${z}`}
+        position={[2, 7 - 0.25, z]}
+        texture={textures.cobble_stone}
+      />
+    );
+
+    // console.log("placed block at ", x + (y - 5), y + 0.25);
   }
 
   // Door
   blocks.push(
     <MinecraftDoorTop
-      key="door-top"
+      key="door1-top"
       position={[2, 2, -0.4]}
+      texture={textures.door_top}
+    />
+  );
+  blocks.push(
+    <MinecraftDoorBottom
+      key="door1-bottom"
+      position={[2, 1, -0.4]}
+      texture={textures.door_bottom}
+    />
+  );
+  blocks.push(
+    <MinecraftDoorTop
+      key="door2-top"
+      position={[3, 2, -0.4]}
       texture={textures.door_top}
     />
   );
 
   blocks.push(
     <MinecraftDoorBottom
-      key="door-bottom"
-      position={[2, 1, -0.4]}
+      key="door2-bottom"
+      position={[3, 1, -0.4]}
       texture={textures.door_bottom}
     />
   );
@@ -197,7 +358,7 @@ function MinecraftHouse() {
   blocks.push(
     <MinecraftBlock
       key="window-right"
-      position={[3, 2, 0]}
+      position={[4, 2, 0]}
       texture={textures.glass}
     />
   );
