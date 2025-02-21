@@ -1,20 +1,22 @@
 "use client";
 
-import { format } from "date-fns";
-import { Heart, User } from "lucide-react";
-import React from "react";
-
-import { Button } from "@/components/ui/button";
+import { PaletteCard } from "@/components/palette-card";
 
 // Sample palette data
 const palettes = [
   {
     id: 1,
-    title: "Nether Loving",
+    title: "Medieval Cool",
     author: "littlemcgee",
     likes: "4.3k",
-    colors: ["#FF0000", "#8B0000", "#FF3030", "#FF4040", "#FF1111"],
-    tags: ["nether", "red", "survival-friendly", "fun"],
+    palette: {
+      wall: "pale_oak_planks.png",
+      base: "stone_bricks.png",
+      roof: "deepslate_bricks.png",
+      door: "dark_oak",
+      frame: "stripped_dark_oak_log.png",
+    },
+    tags: ["medieval", "cool", "survival-friendly", "fun"],
     createdAt: new Date("2024-02-15"),
   },
   {
@@ -22,63 +24,23 @@ const palettes = [
     title: "Desert Dreams",
     author: "blockmaster",
     likes: "2.1k",
-    colors: ["#DAA520", "#D2691E", "#F4A460", "#DEB887", "#CD853F"],
+    palette: {
+      wall: "spruce_planks.png",
+      base: "cobblestone.png",
+      roof: "deepslate_tiles.png",
+      door: "spruce",
+      frame: "stripped_dark_oak_log.png",
+    },
     tags: ["desert", "warm", "natural"],
     createdAt: new Date("2024-02-14"),
   },
-  // Add more palettes...
 ];
 
 export function PaletteGrid() {
   return (
     <div className="grid gap-3">
       {palettes.map((palette) => (
-        <div key={palette.id} className="rounded-lg border bg-background p-3">
-          <div className="mb-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <User className="size-3 text-foreground-muted" />
-              <span className="text-xs text-foreground-muted">
-                {palette.author}
-              </span>
-              <span className="text-xs text-foreground-muted">
-                {format(palette.createdAt, "MMM d, yyyy")}
-              </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Heart className="size-3 text-foreground-muted" />
-              <span className="text-xs text-foreground-muted">
-                {palette.likes}
-              </span>
-            </div>
-          </div>
-          <div className="mb-3 grid grid-cols-5 gap-1.5">
-            {palette.colors.map((color) => (
-              <div
-                key={color}
-                className="aspect-square rounded"
-                style={{ backgroundColor: color }}
-              />
-            ))}
-          </div>
-          <div className="mb-3">
-            <h3 className="text-sm font-medium text-foreground">
-              {palette.title}
-            </h3>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {palette.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-secondary px-1.5 py-0.5 text-xs text-secondary-accent"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-          <Button variant="secondary" size="sm" className="w-full text-xs">
-            Try it out
-          </Button>
-        </div>
+        <PaletteCard key={palette.id} paletteCard={palette} />
       ))}
     </div>
   );

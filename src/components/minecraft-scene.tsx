@@ -1,11 +1,13 @@
 "use client";
 
+import { Palette } from "@/types";
+import { useSelectedPaletteStore } from "@/zustand/useSelectedPaletteStore";
 import { OrbitControls, useTexture } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import * as THREE from "three";
 
-const palette1 = {
+const palette1: Palette = {
   wall: "spruce_planks.png",
   base: "cobblestone.png",
   roof: "deepslate_tiles.png",
@@ -13,7 +15,7 @@ const palette1 = {
   frame: "stripped_dark_oak_log.png",
 };
 
-const palette2 = {
+const palette2: Palette = {
   wall: "bricks.png",
   base: "mud_bricks.png",
   roof: "birch_planks.png",
@@ -21,7 +23,7 @@ const palette2 = {
   frame: "polished_granite.png",
 };
 
-const palette3 = {
+const palette3: Palette = {
   wall: "pale_oak_planks.png",
   base: "stone_bricks.png",
   roof: "deepslate_bricks.png",
@@ -30,6 +32,10 @@ const palette3 = {
 };
 
 export function MinecraftScene() {
+  const selectedPalette = useSelectedPaletteStore(
+    (state) => state.selectedPalette
+  );
+
   return (
     <Canvas shadows camera={{ position: [10, 10, 10], fov: 25 }}>
       <Suspense fallback={null}>
@@ -40,7 +46,7 @@ export function MinecraftScene() {
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
         />
-        <MinecraftHouse palette={palette3} />
+        {selectedPalette && <MinecraftHouse palette={selectedPalette} />}
         <OrbitControls makeDefault />
         <color attach="background" args={["#1c1c1c"]} />
       </Suspense>
@@ -134,13 +140,7 @@ function MinecraftDoorBottom({
 }
 
 type MinecraftHouseProps = {
-  palette: {
-    wall: string;
-    base: string;
-    roof: string;
-    door: string;
-    frame: string;
-  };
+  palette: Palette;
 };
 
 function MinecraftHouse({ palette }: MinecraftHouseProps) {
