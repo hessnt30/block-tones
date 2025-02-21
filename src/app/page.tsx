@@ -1,10 +1,10 @@
 "use client";
 
-import { Search } from "lucide-react";
-import Link from "next/link";
+// import { Search } from "lucide-react";
+// import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
 import { MinecraftScene } from "@/components/minecraft-scene";
 import { PaletteGrid } from "@/components/palette-grid";
 import { PaletteTabs } from "@/components/palette-tabs";

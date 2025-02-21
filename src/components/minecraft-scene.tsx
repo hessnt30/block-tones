@@ -5,31 +5,6 @@ import { useSelectedPaletteStore } from "@/zustand/useSelectedPaletteStore";
 import { OrbitControls, useTexture } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
-import * as THREE from "three";
-
-const palette1: Palette = {
-  wall: "spruce_planks.png",
-  base: "cobblestone.png",
-  roof: "deepslate_tiles.png",
-  door: "spruce",
-  frame: "stripped_dark_oak_log.png",
-};
-
-const palette2: Palette = {
-  wall: "bricks.png",
-  base: "mud_bricks.png",
-  roof: "birch_planks.png",
-  door: "oak",
-  frame: "polished_granite.png",
-};
-
-const palette3: Palette = {
-  wall: "pale_oak_planks.png",
-  base: "stone_bricks.png",
-  roof: "deepslate_bricks.png",
-  door: "dark_oak",
-  frame: "stripped_dark_oak_log.png",
-};
 
 export function MinecraftScene() {
   const selectedPalette = useSelectedPaletteStore(
@@ -174,7 +149,7 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
     for (let x = 0; x < 6; x++) {
       // leave hole in wall for door
       // if ((x === 2 || x === 3) && (y === 1 || y === 2)) continue;
-      let isCorner = x === 0 || x === 5;
+      const isCorner = x === 0 || x === 5;
       blocks.push(
         <MinecraftBlock
           key={`wall-x-${x}-${y}`}
