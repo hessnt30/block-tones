@@ -1,11 +1,13 @@
 "use client";
 
+import { Palette } from "@/types";
+import { useSelectedPaletteStore } from "@/zustand/useSelectedPaletteStore";
 import { OrbitControls, useTexture } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import * as THREE from "three";
 
-const palette1 = {
+const palette1: Palette = {
   wall: "spruce_planks.png",
   base: "cobblestone.png",
   roof: "deepslate_tiles.png",
@@ -13,7 +15,7 @@ const palette1 = {
   frame: "stripped_dark_oak_log.png",
 };
 
-const palette2 = {
+const palette2: Palette = {
   wall: "bricks.png",
   base: "mud_bricks.png",
   roof: "birch_planks.png",
@@ -21,15 +23,19 @@ const palette2 = {
   frame: "polished_granite.png",
 };
 
-const palette3 = {
+const palette3: Palette = {
   wall: "pale_oak_planks.png",
   base: "stone_bricks.png",
   roof: "deepslate_bricks.png",
   door: "dark_oak",
   frame: "stripped_dark_oak_log.png",
-}
+};
 
 export function MinecraftScene() {
+  const selectedPalette = useSelectedPaletteStore(
+    (state) => state.selectedPalette
+  );
+
   return (
     <Canvas shadows camera={{ position: [10, 10, 10], fov: 25 }}>
       <Suspense fallback={null}>
@@ -40,7 +46,7 @@ export function MinecraftScene() {
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
         />
-        <MinecraftHouse palette={palette3} />
+        {selectedPalette && <MinecraftHouse palette={selectedPalette} />}
         <OrbitControls makeDefault />
         <color attach="background" args={["#1c1c1c"]} />
       </Suspense>
@@ -134,13 +140,7 @@ function MinecraftDoorBottom({
 }
 
 type MinecraftHouseProps = {
-  palette: {
-    wall: string;
-    base: string;
-    roof: string;
-    door: string;
-    frame: string;
-  };
+  palette: Palette;
 };
 
 function MinecraftHouse({ palette }: MinecraftHouseProps) {
@@ -170,7 +170,7 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
   }
 
   // Walls
-  for (let y = 1; y < 5; y++) {
+  for (let y = 1; y < 4; y++) {
     for (let x = 0; x < 6; x++) {
       // leave hole in wall for door
       // if ((x === 2 || x === 3) && (y === 1 || y === 2)) continue;
@@ -208,8 +208,9 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
     }
   }
 
-  for (let y = 5; y < 7; y++) {
-    if (y == 5) {
+  // Walls under roof
+  for (let y = 4; y < 6; y++) {
+    if (y == 4) {
       for (let x = 1; x < 5; x++) {
         blocks.push(
           <MinecraftBlock
@@ -229,7 +230,7 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
       }
     }
 
-    if (y === 6) {
+    if (y === 5) {
       for (let x = 2; x < 4; x++) {
         blocks.push(
           <MinecraftBlock
@@ -252,12 +253,12 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
 
   // Roof -- rightside
   for (let x = 0; x < 1; x++) {
-    for (let y = 5; y <= 7; y++) {
+    for (let y = 4; y <= 6; y++) {
       for (let z = -1; z < 7; z++) {
         blocks.push(
           <MinecraftSlab
             key={`slab-roof-${x}-${y}-${z}`}
-            position={[x + (y - 5), y - 0.25, z]}
+            position={[x + (y - 4), y - 0.25, z]}
             texture={textures.roof}
           />
         );
@@ -265,7 +266,7 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
         blocks.push(
           <MinecraftStair
             key={`stair-roof-${x}-${y}-${z}`}
-            position={[x + (y - 5) + 0.25, y + 0.25, z]}
+            position={[x + (y - 4) + 0.25, y + 0.25, z]}
             texture={textures.roof}
           />
         );
@@ -274,12 +275,12 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
   }
 
   for (let x = 1; x < 2; x++) {
-    for (let y = 5; y < 7; y++) {
+    for (let y = 4; y < 6; y++) {
       for (let z = -1; z < 7; z++) {
         blocks.push(
           <MinecraftSlab
             key={`slab-roof-${x}-${y}-${z}`}
-            position={[x + (y - 5), y + 0.25, z]}
+            position={[x + (y - 4), y + 0.25, z]}
             texture={textures.roof}
           />
         );
@@ -287,7 +288,7 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
         blocks.push(
           <MinecraftStair
             key={`stair-roof-${x}-${y}-${z}`}
-            position={[x + (y - 5) - 0.25, y - 0.25, z]}
+            position={[x + (y - 4) - 0.25, y - 0.25, z]}
             texture={textures.roof}
           />
         );
@@ -297,19 +298,19 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
 
   // Roof -- leftside
   for (let x = 5; x < 6; x++) {
-    for (let y = 5; y <= 7; y++) {
+    for (let y = 4; y <= 6; y++) {
       for (let z = -1; z < 7; z++) {
         blocks.push(
           <MinecraftSlab
             key={`slab-roof-${x}-${y}-${z}`}
-            position={[x - (y - 5), y - 0.25, z]}
+            position={[x - (y - 4), y - 0.25, z]}
             texture={textures.roof}
           />
         );
         blocks.push(
           <MinecraftStair
             key={`stair-roof-${x}-${y}-${z}`}
-            position={[x - (y - 5) - 0.25, y + 0.25, z]}
+            position={[x - (y - 4) - 0.25, y + 0.25, z]}
             texture={textures.roof}
           />
         );
@@ -318,37 +319,24 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
   }
 
   for (let x = 4; x < 5; x++) {
-    for (let y = 5; y < 7; y++) {
+    for (let y = 4; y < 6; y++) {
       for (let z = -1; z < 7; z++) {
         blocks.push(
           <MinecraftSlab
             key={`slab-roof-${x}-${y}-${z}`}
-            position={[x - (y - 5), y + 0.25, z]}
+            position={[x - (y - 4), y + 0.25, z]}
             texture={textures.roof}
           />
         );
         blocks.push(
           <MinecraftStair
             key={`stair-roof-${x}-${y}-${z}`}
-            position={[x - (y - 5) + 0.25, y - 0.25, z]}
+            position={[x - (y - 4) + 0.25, y - 0.25, z]}
             texture={textures.roof}
           />
         );
       }
     }
-  }
-
-  // Roof - apex
-  for (let z = -1; z < 6; z++) {
-    blocks.push(
-      <MinecraftSlab
-        key={`slab-roof-${2}-${7}-${z}`}
-        position={[2, 7 - 0.25, z]}
-        texture={textures.roof}
-      />
-    );
-
-    // console.log("placed block at ", x + (y - 5), y + 0.25);
   }
 
   // Door
