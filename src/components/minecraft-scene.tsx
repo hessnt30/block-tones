@@ -149,7 +149,7 @@ function MinecraftHouse({ palette }: MinecraftHouseProps) {
     for (let x = 0; x < 6; x++) {
       // leave hole in wall for door
       // if ((x === 2 || x === 3) && (y === 1 || y === 2)) continue;
-      let isCorner = x === 0 || x === 5;
+      const isCorner = x === 0 || x === 5;
       blocks.push(
         <MinecraftBlock
           key={`wall-x-${x}-${y}`}
