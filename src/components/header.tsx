@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "./theme-switcher";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Header() {
   return (
@@ -35,7 +36,15 @@ export default function Header() {
           <Link href="/create" className="text-sm ">
             Create
           </Link>
-          <Button>Sign In</Button>
+          {/* <Button>Sign In</Button> */}
+          <div>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </div>
         </nav>
       </div>
     </header>
