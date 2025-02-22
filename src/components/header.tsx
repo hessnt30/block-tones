@@ -1,7 +1,6 @@
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "./theme-switcher";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
