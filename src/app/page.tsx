@@ -10,12 +10,16 @@ import { PaletteGrid } from "@/components/palette-grid";
 import { PaletteTabs } from "@/components/palette-tabs";
 import { SelectedPalette } from "@/components/selected-palette";
 import { SuggestedPalettes } from "@/components/suggested-palettes";
+import { useUser } from "@clerk/nextjs";
 
 export default function Page() {
+  const { user, isSignedIn } = useUser();
+
   return (
     <div className="min-h-screen bg-background">
       <main className="container grid flex-1 gap-6 py-6 lg:grid-cols-2">
         <div className="space-y-6">
+          {isSignedIn && <p>Hello, {user.fullName}</p>}
           <div className="h-[500px] rounded-lg border bg-background">
             <MinecraftScene />
           </div>
